@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Interface</title>
+    <style>
+        /* Your CSS styles remain unchanged */
+
+        /* Adding styles for the chat conversation */
+        .chat-conversation {
+            position: fixed;
+            bottom: 90px; /* Adjust this value to suit your layout */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            background-color: #f2f2f2;
+            padding: 20px;
+            overflow-y: scroll; /* Enable scrolling if conversation overflows */
+            max-height: calc(100vh - 200px); /* Adjust based on layout */
+        }
+
+        .user-message {
+            margin-bottom: 10px;
+            padding: 8px;
+            background-color: #d3e8fd;
+            border-radius: 5px;
+            text-align: right;
+        }
+
+        .bot-message {
+            margin-bottom: 10px;
+            padding: 8px;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <h1> NewChat </h1>
+        </div>
+        <div class="left"></div>
+        <div class="right"></div>
+        <div class="bottom-left-text">MINIBOT</div>
+        <img src="minbot.png" alt="Your Image" class="center-image">
+        <div class="chat-conversation" id="chat-area"></div>
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Search about mining">
+            <button id="search-button"><i class="fa fa-search"></i></button>
+            <button id="microphone-button"><i class="fa fa-microphone"></i></button>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        </div>
+    </div>
+    <script>
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const micButton = document.getElementById('microphone-button');
+        const chatArea = document.getElementById('chat-area');
+        const recognition = new webkitSpeechRecognition();
+
+        searchButton.addEventListener('click', search);
+        micButton.addEventListener('click', startSpeechRecognition);
+
+        recognition.onresult = function(event) {
+            const result = event.results[0][0].transcript;
+            searchInput.value = result;
+            search();
+        };
+
+        recognition.onerror = function(event) {
+            console.error('Speech recognition error:', event.error);
+        };
+
+        function startSpeechRecognition() {
+            recognition.start();
+        }
+
+        function search() {
+            const searchQuery = searchInput.value;
+            displayUserMessage(searchQuery);
+            // Perform search or response logic here
+            // Example: You can use a function to simulate a bot response
+            setTimeout(() => {
+                const botResponse = "This is a bot response to: " + searchQuery;
+                displayBotMessage(botResponse);
+            }, 1000);
+        }
+
+        function displayUserMessage(message) {
+            const userDiv = document.createElement('div');
+            userDiv.classList.add('user-message');
+            userDiv.textContent = message;
+            chatArea.appendChild(userDiv);
+            chatArea.scrollTop = chatArea.scrollHeight; // Scroll to bottom
+        }
+
+        function displayBotMessage(message) {
+            const botDiv = document.createElement('div');
+            botDiv.classList.add('bot-message');
+            botDiv.textContent = message;
+            chatArea.appendChild(botDiv);
+            chatArea.scrollTop = chatArea.scrollHeight; // Scroll to bottom
+        }
+    </script>
+</body>
+</html>
